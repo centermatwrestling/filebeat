@@ -1,0 +1,88 @@
+#!/bin/bash
+
+pid=filebeat.pid
+
+function status() {
+    client_result $pwd
+}
+
+function update() {
+    stop
+    ./.openshift/action_hooks/build
+}
+
+function start() {
+    if ! [ -f $pid ]; then
+        erb conf/filebeat.yml.erb > filebeat.yml
+        nohup filebeat-1.2.1-x86_64/filebeat -c filebeat.yml &
+
+        ret=$?
+        if [ $ret -ne 0 ]; then
+            echo "filebeat failed to start - $ret" 1>&2
+            return $ret
+        fi
+        echo $! > $pid
+    fi
+}
+
+function stop() {
+    if [ -f $pid ]; then
+        kill -s SIGTERM $(cat $pid)
+        rm $pid
+    else
+        echo "filebeat is already stopped" 1>&2
+        return 0
+    fi
+}
+
+function restart() {
+    if (stop); then
+        start
+    else
+        start
+    fi
+}
+
+function build() {
+    echo
+}
+
+function post-deploy() {
+    echo
+}
+
+function pre-build() {
+    echo
+}
+
+function tidy() {
+    echo
+}
+
+#
+#  main():
+#
+
+# Ensure arguments.
+if ! [ $# -gt 0 ]; then
+    echo "Usage: $0 [start|restart|graceful|graceful-stop|stop|status|update|use-source]"
+    exit 1
+fi
+
+# Source utility functions.
+#source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+# Handle commands.
+case "$1" in
+    start)               start       ;;
+    restart|graceful)    restart     ;;
+    graceful-stop|stop)  stop        ;;
+    status)              status      ;;
+    build)               build       ;;
+    pre-build)           pre-build   ;;
+    post-deploy)         post-deploy ;;
+    tidy)                tidy        ;;
+    update)              update      ;;
+    use-source)          use-source  $2 $3 ;;
+    *)
+esac

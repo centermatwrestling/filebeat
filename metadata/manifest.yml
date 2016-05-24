@@ -1,0 +1,19 @@
+Name: filebeat
+Cartridge-Short-Name: filebeat
+Display-Name: filebeat 1.2.1
+Version: "1.2.1"
+Versions: ["1.2.1"]
+Cartridge-Version: 0.0.1
+Cartridge-Vendor: custom
+Categories:
+  - embedded
+  - plugin
+Provides:
+ - filebeat
+Scaling:
+  Min: 1
+  Max: -1
+Group-Overrides:
+  - components:
+    - filebeat
+    - web_framework

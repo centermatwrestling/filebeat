@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+if ! [ ${OPENSHIFT_FILEBEAT_LOGSTASH_HOST} ]; then
+  cat >&2 <<-EOF
+Missing env var OPENSHIFT_FILEBEAT_LOGSTASH_HOST.
+Please execute the following command and try again:
+
+\$ rhc env set OPENSHIFT_FILEBEAT_LOGSTASH_HOST=<your.logstash.hostname> -a $OPENSHIFT_APP_NAME -n $OPENSHIFT_NAMESPACE
+EOF
+  exit 1
+fi
+
+if ! [ ${OPENSHIFT_FILEBEAT_LOGSTASH_PORT} ]; then
+  client_result "Env var OPENSHIFT_FILEBEAT_LOGSTASH_PORT was not found."
+  client_result "Please run the following command and restart your app:"
+  client_result "  \$ rhc env set OPENSHIFT_FILEBEAT_LOGSTASH_PORT=XXXX -a $OPENSHIFT_APP_NAME -n $OPENSHIFT_NAMESPACE"
+fi
+
+curl -s https://download.elastic.co/beats/filebeat/filebeat-1.2.1-x86_64.tar.gz | tar xz
