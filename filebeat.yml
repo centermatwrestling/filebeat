@@ -1,0 +1,58 @@
+################### Filebeat Configuration Example #########################
+#
+############################# Filebeat #####################################
+filebeat:
+  # List of prospectors to fetch data.
+  prospectors:
+    # This is a text lines files harvesting definition 
+    -
+      # Path like /var/log/*/*.log can be used.
+      # Make sure no file is defined twice as this can lead to unexpected behaviour.
+      paths:
+        - /var/lib/openshift/5712655189f5cf3d3100010e/app-root/logs/*.log
+      # Additional fields.
+      fields:
+        logzio_codec: plain
+        token: NMMdzAoeJZZpHEdHOcqIbIPYGJwfrpwf
+      fields_under_root: true
+      # Ignore files which were modified more then the defined timespan in the past
+      # Time strings like 2h (2 hours), 5m (5 minutes) can be used.
+      ignore_older: 24h
+      # Type to be published in the 'type' field. 
+      document_type: SOME_LINE_LOG_TYPE
+    # This is a JSON files harvesting definition 
+    -
+      paths:
+        - /path/to/json/file.json
+      fields:
+        logzio_codec: json
+        token: NMMdzAoeJZZpHEdHOcqIbIPYGJwfrpwf
+      fields_under_root: true
+      ignore_older: 24h
+      document_type: MY_JSON_LOG_TYPE
+  # Name of the registry file, which is used to keep track of the location 
+  # of logs in the files that have already been sent between restarts
+  # of the filebeat process.
+  registry_file: /var/lib/filebeat/registry
+###############################################################################
+############################# Libbeat Config ##################################
+# Base config file used by all other beats for using libbeat features
+############################# Output ##########################################
+# Configure what outputs to use when sending the data collected by the beat.
+output:
+  logstash:
+    # The Logstash hosts
+    hosts: ["listener.logz.io:5015"]
+    tls:
+      # List of root certificates for HTTPS server verifications
+      certificate_authorities: ['/var/lib/openshift/5712655189f5cf3d3100010e/app-root/repo/COMODORSADomainValidationSecureServerCA.crt']
+############################# Logging #########################################
+# default to syslog.
+logging:
+  # To enable logging to files, to_files option has to be set to true
+  files:
+    # Configure log file size limit.
+    rotateeverybytes: 10485760 # = 10MB
+  # Sets log level. The default log level is error.
+  # Available log levels are: critical, error, warning, info, debug
+  #level: error
