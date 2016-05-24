@@ -20,10 +20,20 @@ filebeat:
       ignore_older: 24h
       # Type to be published in the 'type' field. 
       document_type: SOME_LINE_LOG_TYPE
+    # This is a JSON files harvesting definition 
+    -
+      paths:
+        - /path/to/json/file.json
+      fields:
+        logzio_codec: json
+        token: NMMdzAoeJZZpHEdHOcqIbIPYGJwfrpwf
+      fields_under_root: true
+      ignore_older: 24h
+      document_type: MY_JSON_LOG_TYPE
   # Name of the registry file, which is used to keep track of the location 
   # of logs in the files that have already been sent between restarts
   # of the filebeat process.
-  registry_file: /var/lib/openshift/5712655189f5cf3d3100010e/app-root/repo/filebeat/registry
+  registry_file: /var/lib/filebeat/registry
 ###############################################################################
 ############################# Libbeat Config ##################################
 # Base config file used by all other beats for using libbeat features
