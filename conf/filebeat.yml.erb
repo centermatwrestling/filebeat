@@ -27,6 +27,9 @@ filebeat:
 ###############################################################################
 ############################# Libbeat Config ##################################
 # Base config file used by all other beats for using libbeat features
+multiline:
+  pattern: "^\s"
+  match: after
 ############################# Output ##########################################
 # Configure what outputs to use when sending the data collected by the beat.
 output:
