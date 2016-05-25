@@ -35,7 +35,7 @@ output:
     hosts: ["listener.logz.io:5015"]
     tls:
       # List of root certificates for HTTPS server verifications
-      certificate_authorities: ['/var/lib/openshift/5712655189f5cf3d3100010e/app-root/repo/COMODORSADomainValidationSecureServerCA.crt']
+      certificate_authorities: ['/var/lib/openshift/5712655189f5cf3d3100010e/app-root/repo/filebeat/COMODORSADomainValidationSecureServerCA.crt']
 ############################# Logging #########################################
 # default to syslog.
 logging:
