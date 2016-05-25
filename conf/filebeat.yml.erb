@@ -12,7 +12,7 @@ filebeat:
       # For each file found under this path, a harvester is started.
       # Make sure not file is defined twice as this can lead to unexpected behaviour.
       paths:
-        # - /var/log/*.log
+        - <%= ENV['OPENSHIFT_HOMEDIR'] %>/logs/*.log
         #- c:\programdata\elasticsearch\logs\*
 
       # Configure the file encoding for reading files with international characters
@@ -327,7 +327,7 @@ output:
     tls:
       # List of root certificates for HTTPS server verifications
 <% if ENV['OPENSHIFT_FILEBEAT_LOGSTASH_TLS_CA_FILENAME'] %>
-      certificate_authorities: ["<%= ENV['OPENSHIFT_HOMEDIR'] %>app-root/repo/COMODORSADomainValidationSecureServerCA.crt"]
+      certificate_authorities: ["<%= ENV['OPENSHIFT_HOMEDIR'] %>app-root/repo/filbeat/COMODORSADomainValidationSecureServerCA.crt"]
 <% end %>
 
       # Certificate for TLS client authentication
